@@ -1,4 +1,4 @@
-function CardUniversidad({ nombre, tipo, costo, carrera }) {
+function CardUniversidad({ nombre, tipo, carreras }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition duration-300">
 
@@ -10,13 +10,20 @@ function CardUniversidad({ nombre, tipo, costo, carrera }) {
         Tipo: {tipo}
       </p>
 
-      <p className="text-gray-600">
-        Carrera: {carrera}
-      </p>
+        <div className="mt-4">
 
-      <p className="text-green-600 font-bold mt-2">
-        {costo}
-      </p>
+            <h3 className="font-bold text-gray-700 mb-2">
+                Carreras:
+            </h3>
+
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
+                {carreras.map((carrera, index) => (
+                    <li key={index}>
+                    {carrera}
+                    </li>
+                ))}
+            </ul>
+        </div>
 
       <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
         Ver Malla

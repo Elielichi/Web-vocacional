@@ -19,8 +19,7 @@ function Directorio() {
             key={index}
             nombre={uni.nombre}
             tipo={uni.tipo}
-            costo={uni.costo}
-            carrera={uni.carrera}
+            carreras={uni.carreras}
           />
 
         ))}
