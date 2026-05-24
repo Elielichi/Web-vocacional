@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx'
 import TestVocacional from './pages/TestVocacional.jsx'
 import Login from './pages/Login.jsx'
 import Directorio from './pages/Directorio.jsx'
+import Register from './pages/Register.jsx'
 
 import './index.css'
 
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/" element={<Home />} />
           <Route path="/test" element={<TestVocacional />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/directorio" element={<Directorio />} />
           {/* <Route path="/perfil" element={<Perfil />} /> */}
         </Routes>

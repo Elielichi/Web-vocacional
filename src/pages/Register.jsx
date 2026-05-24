@@ -24,7 +24,7 @@ export default function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (form.contraseña !== form.confimar) {
+        if (form.contraseña !== form.confirmar) {
             alert("Las contraseñas no coinciden");
             return;
         }
@@ -37,7 +37,7 @@ export default function Register() {
         <div className='min-h-screen flex items-center justify-center bg-slate-50 p-6'>
             <form
                 onSubmit={handleSubmit}
-                className='bg-white p-8 rounded-2xl shadow-xl w-full max-w-md pt-4'
+                className='bg-white p-8 rounded-2xl shadow-xl w-full max-w-md pt-4 space-y-6'
             >
                 <h1 className='text-2xl font-bold'>¡ÚNETE A ...!</h1>
 

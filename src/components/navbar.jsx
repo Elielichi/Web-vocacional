@@ -35,6 +35,12 @@ function Navbar() {
             </Link>
           </li>
 
+          <li>
+            <Link to="/register" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+              Registrarse
+            </Link>
+          </li>
+
         </ul>
       </div>
     </nav>
