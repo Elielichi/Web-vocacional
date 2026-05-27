@@ -1,84 +1,106 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import Footer from '../components/footer';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { loginOVerificarUsuario, carreraTemporal } = useApp();
-  
-  // Estados para el formulario
-  const [nombre, setNombre] = useState('');
+  const { login } = useApp();
+
   const [correo, setCorreo] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
 
-    if (!nombre || !correo) {
-      alert("Por favor, completa todos los campos requeridos.");
+    if (!correo || !contrasena) {
+      setError('Por favor completa todos los campos.');
       return;
     }
 
-    // Datos simulados del estudiante
-    const datosEstudiante = {
-      nombre: nombre,
-      correo: correo,
-      rol: "Estudiante"
-    };
-
-    // Logueamos al usuario y le adjuntamos la carrera que sacó en el test
-    loginOVerificarUsuario(datosEstudiante, carreraTemporal);
-
-    // Una vez registrado, lo enviamos directamente a su panel/perfil para que vea su carrera guardada
-    navigate('/perfil');
+    setCargando(true);
+    setTimeout(() => {
+      const resultado = login(correo, contrasena);
+      setCargando(false);
+      if (resultado.ok) {
+        navigate('/perfil');
+      } else {
+        setError('Correo o contraseña incorrectos.');
+      }
+    }, 800);
   };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-8 space-y-6">
+      <div className="max-w-md w-full space-y-6">
+
+        {/* Logo / Header */}
         <div className="text-center">
-          <h2 className="text-3xl font-black text-slate-900">Crea tu Cuenta</h2>
-          <p className="text-sm text-slate-500 font-medium mt-1">
-            {carreraTemporal 
-              ? `Regístrate para guardar tu resultado: ${carreraTemporal}` 
-              : "Regístrate para acceder al directorio educativo"}
-          </p>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-lg">
+            <span className="text-white text-2xl font-black">V</span>
+          </div>
+          <h1 className="text-3xl font-black text-slate-900">VocaTest</h1>
+          <p className="text-slate-500 text-sm mt-1">Inicia sesión para continuar</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-1">Nombre Completo</label>
-            <input 
-              type="text" 
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              placeholder="Ej. Ana García" 
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
-            />
+        {/* Card */}
+        <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-8 space-y-5">
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm font-medium px-4 py-3 rounded-xl flex items-center gap-2">
+              <span>⚠️</span> {error}
+            </div>
+          )}
+
+          {/* Credenciales demo */}
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-1">
+            <p className="text-xs font-bold text-blue-700 uppercase tracking-wider mb-2">Cuentas de prueba ULima</p>
+            <p className="text-xs text-blue-600">👨‍🎓 Estudiante: <span className="font-mono font-bold">estudiante@ulima.edu.pe</span> / <span className="font-mono font-bold">ulima123</span></p>
+            <p className="text-xs text-blue-600">👨‍🏫 Profesor: <span className="font-mono font-bold">profesor@ulima.edu.pe</span> / <span className="font-mono font-bold">profe123</span></p>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-1">Correo Electrónico</label>
-            <input 
-              type="email" 
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              placeholder="estudiante@colegio.edu.pe" 
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-1">Correo institucional</label>
+              <input
+                type="email"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                placeholder="tucorreo@ulima.edu.pe"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
+              />
+            </div>
 
-          <button 
-            type="submit" 
-            className="w-full bg-linear-to-r from-blue-600 to-indigo-600 text-white font-extrabold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
-          >
-            Guardar Perfil y Continuar 🚀
-          </button>
-        </form>
-        
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-1">Contraseña</label>
+              <input
+                type="password"
+                value={contrasena}
+                onChange={(e) => setContrasena(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={cargando}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all cursor-pointer disabled:opacity-60"
+            >
+              {cargando ? "Verificando..." : "Iniciar Sesión 🚀"}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-slate-500">
+            ¿No tienes cuenta?{' '}
+            <Link to="/register" className="text-blue-600 font-bold hover:underline">
+              Regístrate aquí
+            </Link>
+          </p>
+        </div>
       </div>
-      
     </div>
-    
   );
 }
