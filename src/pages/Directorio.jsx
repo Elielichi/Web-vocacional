@@ -62,7 +62,7 @@ function Directorio() {
             </p>
             <div className="max-w-5xl mx-auto px-4 space-y-6"> 
             {/* 'space-y-6' les dará una separación vertical limpia */}
-            {universidades.map((uni) => (
+            {universidadesFiltradas.map((uni) => (
               <CardUniversidad 
                 logo={uni.logo}
                 key={uni.id} 
