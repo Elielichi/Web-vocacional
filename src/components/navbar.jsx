@@ -14,6 +14,7 @@ function Navbar() {
     <nav className="bg-blue-600 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
+        <img></img>
         <Link to="/" className="text-2xl font-bold hover:text-yellow-300 transition">
           VocaTest
         </Link>

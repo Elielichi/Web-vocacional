@@ -145,7 +145,7 @@ export default function Perfil() {
             </div>
           </div>
         )}
-
+        
         {/* ======================== TAB ESTUDIANTE: RESULTADO TEST ======================== */}
         {tabActiva === 'test' && !esProfesor && (
           <div className="space-y-6">

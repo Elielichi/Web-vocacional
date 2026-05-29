@@ -122,7 +122,7 @@ const universidades = [
     carreras: [
       {
         nombre: "Ingeniería Informática",
-        facultad: "Ingeniería",
+        facultad: "Ciencias e Ingeniería",
         duracion: "10 ciclos (5 años)",
         creditos: 218,
         planEstudios: "/mallas/pucp-informatica.pdf",
@@ -130,7 +130,7 @@ const universidades = [
       },
       {
         nombre: "Ingeniería Civil",
-        facultad: "Ingeniería",
+        facultad: "Ciencias e Ingeniería",
         duracion: "10 ciclos (5 años)",
         creditos: 225,
         planEstudios: null,
@@ -138,7 +138,7 @@ const universidades = [
       },
       {
         nombre: "Arquitectura",
-        facultad: "Arquitectura",
+        facultad: "Arquitectura y Urbanismo",
         duracion: "10 ciclos (5 años)",
         creditos: 230,
         planEstudios: null,
@@ -169,12 +169,12 @@ const universidades = [
         descripcion: "Derecho constitucional, civil y corporativo."
       },
       {
-        nombre: "Medicina",
-        facultad: "Medicina",
-        duracion: "14 ciclos (7 años)",
-        creditos: 350,
+        nombre: "Ingeniería Mecatrónica",
+        facultad: "Ciencias e Ingeniería",
+        duracion: "10 ciclos (5 años)",
+        creditos: 222,
         planEstudios: null,
-        descripcion: "Formación médica integral con práctica clínica."
+        descripcion: "Integración de sistemas mecánicos, electrónicos y de control."
       },
       {
         nombre: "Diseño Gráfico",
@@ -186,19 +186,19 @@ const universidades = [
       },
       {
         nombre: "Comunicación Audiovisual",
-        facultad: "Comunicación",
+        facultad: "Ciencias y Artes de la Comunicación",
         duracion: "10 ciclos (5 años)",
         creditos: 200,
         planEstudios: null,
         descripcion: "Producción audiovisual, cine y medios digitales."
       },
       {
-        nombre: "Administración",
-        facultad: "Negocios",
+        nombre: "Gestión y Alta Dirección",
+        facultad: "Gestión y Alta Dirección",
         duracion: "10 ciclos (5 años)",
         creditos: 210,
         planEstudios: null,
-        descripcion: "Gestión empresarial con enfoque en responsabilidad social."
+        descripcion: "Gestión de organizaciones con enfoque estratégico y social."
       }
     ]
   },

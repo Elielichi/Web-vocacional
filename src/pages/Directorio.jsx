@@ -60,16 +60,18 @@ function Directorio() {
               {universidadesFiltradas.length} universidad{universidadesFiltradas.length !== 1 ? "es" : ""} encontrada{universidadesFiltradas.length !== 1 ? "s" : ""}
               {busqueda && ` para "${busqueda}"`}
             </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
-              {universidadesFiltradas.map((uni, index) => (
-                <CardUniversidad
-                  key={index}
-                  nombre={uni.nombre}
-                  tipo={uni.tipo}
-                  carreras={uni.carreras}
-                  busqueda={busqueda}
-                />
-              ))}
+            <div className="max-w-5xl mx-auto px-4 space-y-6"> 
+            {/* 'space-y-6' les dará una separación vertical limpia */}
+            {universidades.map((uni) => (
+              <CardUniversidad 
+                logo={uni.logo}
+                key={uni.id} 
+                nombre={uni.nombre} 
+                tipo={uni.tipo} 
+                carreras={uni.carreras} 
+                busqueda={busqueda} 
+              />
+            ))}
             </div>
           </>
         ) : (
