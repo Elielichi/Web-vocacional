@@ -105,7 +105,6 @@ export function AppProvider({ children }) {
     return { ok: false };
   };
 
-  // 🔥 LÓGICA DE REGISTRO ACTUALIZADA PARA ACEPTAR PROFESORES
   const register = (datosUsuario) => {
     const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
     const correoNormalizado = datosUsuario.correo.trim().toLowerCase();
