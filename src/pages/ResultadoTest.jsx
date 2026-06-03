@@ -69,7 +69,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 2,000 - S/. 3,800 mensual",
       escalaPagos: "Escalas diferenciadas por evaluación",
-      mallaUrl: "https://www.upch.edu.pe/sites/default/files/plan_de_estudios/medicina.pdf",
+      mallaUrl: "https://medicina.cayetano.edu.pe/wp-content/uploads/sites/2/2025/07/plan_de_estudios-MEDICINA-2024.pdf",
       masInfoUrl: "https://cayetano.edu.pe/pregrado/medicina/",
       destacado: true
     },
@@ -78,7 +78,7 @@ const equivalenciasCarreras = {
       tipo: "Pública",
       costoAproximado: "Gratuita (Costo administrativo mínimo)",
       escalaPagos: "No aplica",
-      mallaUrl: "https://medicina.cayetano.edu.pe/wp-content/uploads/sites/2/2025/07/plan_de_estudios-MEDICINA-2024.pdf",
+      mallaUrl: "https://medicina.unmsm.edu.pe/wp-content/uploads/2021/06/PLAN-CURRICULAR-EP-MEDICINA.pdf",
       masInfoUrl: "https://medicina.unmsm.edu.pe/escuela-profesional-de-medicina-humana/",
       destacado: false
     },
@@ -192,7 +192,7 @@ const procesarResultadosAsincronos = async (listaRespuestas) => {
     }
   };
 
-  
+
 
 const ResultadoTest = () => {
   const navigate = useNavigate();
