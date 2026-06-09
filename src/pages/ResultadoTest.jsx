@@ -4,6 +4,7 @@ import { useApp } from '../context/AppContext';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
+// Esta variable solo sirve como "respaldo" visual inicial. Tu algoritmo no se rompe.
 const equivalenciasCarreras = {
   "Ingeniería de Sistemas y Computación": [
     {
@@ -11,8 +12,8 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 2,500 - S/. 4,200 mensual",
       escalaPagos: "5 escalas según colegio de procedencia",
-      mallaUrl: "https://www.ulima.edu.pe/sites/default/files/career/files/plan_de_estudios_eegg-2026-1.pdf",
-      masInfoUrl: "https://www.ulima.edu.pe/pregrado/ingenieria-de-sistemas", // Enlace informativo añadido
+      mallaUrl: "/mallas/ulima-sistemas.pdf",
+      masInfoUrl: "https://www.ulima.edu.pe/pregrado/ingenieria-de-sistemas", 
       destacado: true
     },
     {
@@ -20,7 +21,7 @@ const equivalenciasCarreras = {
       tipo: "Pública",
       costoAproximado: "Gratuita (Costo administrativo mínimo)",
       escalaPagos: "No aplica",
-      mallaUrl: "https://www.scribd.com/document/357167816/Plan-de-estudios-Ingenieria-de-Sistemas-UNMSM-pdf",
+      mallaUrl: "/mallas/unmsm-software.pdf",
       masInfoUrl: "https://fisi.unmsm.edu.pe/html/sistemas.html",
       destacado: false
     },
@@ -29,7 +30,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 850 - S/. 1,200 mensual",
       escalaPagos: "Turno y sede dependiente",
-      mallaUrl: "https://www.utp.edu.pe/sites/default/files/mallas/MALLA_Ingenieria_de_Sistemas_e_Informatica_0.pdf",
+      mallaUrl: "/mallas/utp-sistemas.pdf",
       masInfoUrl: "https://www.utp.edu.pe/carreras/ingenieria-de-sistemas-e-informatica",
       destacado: false
     }
@@ -40,7 +41,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 1,800 - S/. 3,500 mensual",
       escalaPagos: "7 escalas según evaluación socioeconómica",
-      mallaUrl: "https://facultad-ciencias-ingenieria.pucp.edu.pe/wp-content/uploads/2026/03/ppee_INDUSTRIAL-2026-1.pdf",
+      mallaUrl: "/mallas/pucp-informatica.pdf",
       masInfoUrl: "https://pucp.edu.pe/carrera/ingenieria-industrial/",
       destacado: true
     },
@@ -49,7 +50,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 2,500 - S/. 4,200 mensual",
       escalaPagos: "5 escalas",
-      mallaUrl: "https://www.ulima.edu.pe/sites/default/files/career/files/ingenieria_industrial_plan_de_estudios.pdf",
+      mallaUrl: "/mallas/ulima-industrial.pdf",
       masInfoUrl: "https://www.ulima.edu.pe/pregrado/ingenieria-industrial",
       destacado: false
     },
@@ -58,7 +59,7 @@ const equivalenciasCarreras = {
       tipo: "Pública",
       costoAproximado: "Gratuita (Costo administrativo mínimo)",
       escalaPagos: "No aplica",
-      mallaUrl: "https://acreditacion.uni.edu.pe/es/industrial/curriculum/",
+      mallaUrl: "/mallas/uni-industrial.pdf",
       masInfoUrl: "https://portal.uni.edu.pe/index.php/facultades/ingenieria-industrial-y-de-sistemas",
       destacado: false
     }
@@ -69,7 +70,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 2,000 - S/. 3,800 mensual",
       escalaPagos: "Escalas diferenciadas por evaluación",
-      mallaUrl: "https://medicina.cayetano.edu.pe/wp-content/uploads/sites/2/2025/07/plan_de_estudios-MEDICINA-2024.pdf",
+      mallaUrl: "/mallas/cayetano-medicina.pdf",
       masInfoUrl: "https://cayetano.edu.pe/pregrado/medicina/",
       destacado: true
     },
@@ -78,7 +79,7 @@ const equivalenciasCarreras = {
       tipo: "Pública",
       costoAproximado: "Gratuita (Costo administrativo mínimo)",
       escalaPagos: "No aplica",
-      mallaUrl: "https://medicina.unmsm.edu.pe/wp-content/uploads/2021/06/PLAN-CURRICULAR-EP-MEDICINA.pdf",
+      mallaUrl: "/mallas/unmsm-medicina.pdf",
       masInfoUrl: "https://medicina.unmsm.edu.pe/escuela-profesional-de-medicina-humana/",
       destacado: false
     },
@@ -87,7 +88,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 1,500 - S/. 2,800 mensual",
       escalaPagos: "4 escalas",
-      mallaUrl: "https://medicina.usmp.edu.pe/wp-content/uploads/transparencia/CBC-VII/MV8/RR.459-2025-CU-R-USMP-CURRICULO_FMH-2025_ve2.pdf",
+      mallaUrl: "/mallas/usmp-medicina.pdf",
       masInfoUrl: "https://medicina.usmp.edu.pe/",
       destacado: false
     }
@@ -98,7 +99,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 1,800 - S/. 3,500 mensual",
       escalaPagos: "7 escalas",
-      mallaUrl: "https://facultad-derecho.pucp.edu.pe/wp-content/uploads/2022/08/malla-curricular.pdf",
+      mallaUrl: "/mallas/pucp-derecho.pdf",
       masInfoUrl: "https://pucp.edu.pe/carrera/derecho/",
       destacado: true
     },
@@ -107,7 +108,7 @@ const equivalenciasCarreras = {
       tipo: "Pública",
       costoAproximado: "Gratuita",
       escalaPagos: "No aplica",
-      mallaUrl: "https://derecho2.unmsm.edu.pe/ddocus/ANEXO%20RR%2007023-R-170001.pdf",
+      mallaUrl: "/mallas/unmsm-derecho.pdf",
       masInfoUrl: "https://derecho.unmsm.edu.pe/",
       destacado: false
     }
@@ -118,7 +119,7 @@ const equivalenciasCarreras = {
       tipo: "Privada",
       costoAproximado: "S/. 2,500 - S/. 4,200 mensual",
       escalaPagos: "5 escalas",
-      mallaUrl: "https://www.ulima.edu.pe/sites/default/files/career/files/7000_plan_de_estudios_2026-1.pdf",
+      mallaUrl: "/mallas/ulima-arquitectura.pdf",
       masInfoUrl: "https://www.ulima.edu.pe/pregrado/arquitectura",
       destacado: true
     },
@@ -127,83 +128,21 @@ const equivalenciasCarreras = {
       tipo: "Pública",
       costoAproximado: "Gratuita",
       escalaPagos: "No aplica",
-      mallaUrl: "https://portal.uni.edu.pe/index.php/facultades/arquitectura-urbanismo-y-artes/arquitectura",
+      mallaUrl: "/mallas/uni-arquitectura.pdf",
       masInfoUrl: "https://faua.uni.edu.pe/",
       destacado: false
     }
   ]
 };
 
-const procesarResultadosAsincronos = async (listaRespuestas) => {
-    setIsLoading(true);
-
-    try {
-      // Simulación del procesamiento del algoritmo
-      await new Promise((resolve) => setTimeout(resolve, 2200));
-
-      const conteo = listaRespuestas.reduce((acc, cat) => {
-        acc[cat] = (acc[cat] || 0) + 1;
-        return acc;
-      }, {});
-
-      const areaGanadora = Object.keys(conteo).reduce((a, b) => conteo[a] > conteo[b] ? a : b);
-
-      // Mapeo completo de las carreras según la categoría ganadora
-      const nombresMacroAreas = {
-        Tecnologia: "Ingeniería de Sistemas y Computación",
-        Negocios_Finanzas: "Ingeniería Industrial",
-        Salud_Bienestar: "Medicina",
-        Humanidades_Leyes: "Derecho",
-        Diseno_Construccion: "Arquitectura"
-      };
-
-      const carreraCalculada = nombresMacroAreas[areaGanadora] || "Ingeniería de Sistemas y Computación";
-
-      // BÚSQUEDA DINÁMICA
-      const infoCarrera = buscarCarreraGlobal(carreraCalculada);
-      const carreraFinalAAsignar = infoCarrera ? infoCarrera.nombre : carreraCalculada;
-
-      // =======================================================
-      // 🔥 SOLUCIÓN: ESCRITURA HÍBRIDA Y ESPERA ASÍNCRONA
-      // =======================================================
-      
-      // 1. Forzamos la actualización local SIEMPRE (para que la UI no lea caché vieja)
-      if (typeof setCarreraTemporal === 'function') {
-        setCarreraTemporal(carreraFinalAAsignar);
-      }
-      localStorage.setItem('carreraTemporal', carreraFinalAAsignar);
-
-      // 2. Si está logueado, aseguramos la persistencia oficial en el servidor
-      if (user) {
-        if (typeof guardarResultadoTest === 'function') {
-          // ⚠️ AGREGADO 'await': Detiene la navegación hasta que el contexto se actualice con el nuevo resultado
-          await guardarResultadoTest(carreraFinalAAsignar); 
-        }
-      }
-
-      // 3. Ahora que todo está guardado y actualizado en caliente, cambiamos de pantalla
-      navigate('/resultado-test');
-
-    } catch (error) {
-      console.error(error);
-      alert("Hubo un problema al procesar tus respuestas.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-
-
 const ResultadoTest = () => {
   const navigate = useNavigate();
   const { carreraTemporal } = useApp();
 
-  // 🛠️ Estado dinámico inicializado con prioridad limpia
   const [carreraFinal, setCarreraFinal] = useState(() => {
     return carreraTemporal || localStorage.getItem('carreraTemporal') || "Ingeniería de Sistemas y Computación";
   });
 
-  // 🛠️ Sincronizar el estado de la pantalla cada vez que la carrera cambie en el Contexto o Storage
   useEffect(() => {
     const ultimaCarrera = carreraTemporal || localStorage.getItem('carreraTemporal');
     if (ultimaCarrera) {
@@ -284,7 +223,8 @@ const ResultadoTest = () => {
                       onClick={() => abrirEnlaceExterno(uni.mallaUrl)}
                       className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shadow-sm cursor-pointer"
                     >
-                      Ver Malla Curricular
+                      {/* 🔥 AQUÍ ESTÁ EL CAMBIO DE TEXTO QUE PEDISTE */}
+                      Ver plan de estudios
                     </button>
                     <button 
                       onClick={() => abrirEnlaceExterno(uni.masInfoUrl)}

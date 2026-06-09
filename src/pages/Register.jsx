@@ -21,41 +21,86 @@ export default function Register() {
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
 
+  const [mostrarPass, setMostrarPass] = useState(false);
+  const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
+
+  const obtenerFortaleza = (password) => {
+    let puntos = 0;
+
+    if (password.length >= 8) puntos++;
+    if (/[A-Z]/.test(password)) puntos++;
+    if (/[a-z]/.test(password)) puntos++;
+    if (/\d/.test(password)) puntos++;
+    if (/[^A-Za-z0-9]/.test(password)) puntos++;
+
+    if (puntos <= 2)
+      return {
+        texto: "Débil",
+        color: "bg-red-500",
+        width: "33%"
+      };
+
+    if (puntos <= 4)
+      return {
+        texto: "Media",
+        color: "bg-yellow-500",
+        width: "66%"
+      };
+
+    return {
+      texto: "Fuerte",
+      color: "bg-green-500",
+      width: "100%"
+    };
+  };
+
+  const fortaleza = obtenerFortaleza(form.contraseña);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+
+    if (error) {
+      setError('');
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    if (!form.nombres || !form.apellidos || !form.correo || !form.contraseña) {
+    if (
+      !form.nombres ||
+      !form.apellidos ||
+      !form.correo ||
+      !form.contraseña ||
+      !form.confirmar
+    ) {
       setError('Los campos con * son obligatorios.');
       return;
     }
 
     const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
-    if (!regexNombre.test(form.nombres)){
+    if (!regexNombre.test(form.nombres)) {
       setError('Los nombres solo pueden contener letras.')
       return;
     }
 
-    if (!regexNombre.test(form.apellidos)){
+    if (!regexNombre.test(form.apellidos)) {
       setError('Los apellidos solo pueden contener letras.')
       return;
     }
 
     const regexTelefono = /^9\d{8}$/;
 
-    if (form.telefono && !regexTelefono.test(form.telefono)){
+    if (form.telefono && !regexTelefono.test(form.telefono)) {
       setError('Ingrese un número de teléfono válido.')
       return;
     }
 
     const edad = Number(form.edad);
 
-    if (form.edad && (edad < 15 || edad > 80)){
+    if (form.edad && (edad < 15 || edad > 80)) {
       setError('La edad debe estar entre 15 y 80 años.')
       return;
     }
@@ -136,14 +181,76 @@ export default function Register() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Contraseña *</label>
-                <input name="contraseña" type="password" onChange={handleChange} placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
+                <label className="block text-sm font-bold text-slate-700 mb-1">
+                  Contraseña *
+                </label>
+
+                <input
+                  name="contraseña"
+                  value={form.contraseña}
+                  type={mostrarPass ? "text" : "password"}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setMostrarPass(!mostrarPass)}
+                  className="text-xs text-blue-600 mt-1 hover:underline"
+                >
+                  {mostrarPass ? "Ocultar" : "Mostrar"}
+                </button>
+
+                {form.contraseña && (
+                  <div className="mt-2">
+                    <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                      <div
+                        className={`h-2 ${fortaleza.color} transition-all`}
+                        style={{ width: fortaleza.width }}
+                      />
+                    </div>
+
+                    <p className="text-xs mt-1 text-gray-600">
+                      Fortaleza: <strong>{fortaleza.texto}</strong>
+                    </p>
+                  </div>
+                )}
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Confirmar *</label>
-                <input name="confirmar" type="password" onChange={handleChange} placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
+                <label className="block text-sm font-bold text-slate-700 mb-1">
+                  Confirmar *
+                </label>
+
+                <input
+                  name="confirmar"
+                  value={form.confirmar}
+                  type={mostrarConfirmar ? "text" : "password"}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
+                  className="text-xs text-blue-600 mt-1 hover:underline"
+                >
+                  {mostrarConfirmar ? "Ocultar" : "Mostrar"}
+                </button>
+
+                {form.confirmar && (
+                  <p
+                    className={`text-xs mt-1 ${form.contraseña === form.confirmar
+                      ? "text-green-600"
+                      : "text-red-600"
+                      }`}
+                  >
+                    {form.contraseña === form.confirmar
+                      ? "✓ Las contraseñas coinciden"
+                      : "✗ Las contraseñas no coinciden"}
+                  </p>
+                )}
               </div>
             </div>
 

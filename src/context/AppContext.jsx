@@ -11,7 +11,7 @@ const USUARIOS_DEFAULT = [
     carrerasRecomendadas: ["Ingeniería de Sistemas", "Economía", "Ingeniería Civil"],
     universidadesFavoritas: ["Universidad de Lima", "Universidad del Pacífico", "Universidad Nacional Mayor de San Marcos"],
     historialTests: [{ resultado: "Ingeniería de Sistemas y Computación", fecha: "12 enero 2026" }],
-    fechaTest: "12 enero 2026", ultimoIngreso: "25/05/2026"
+    fechaTest: "12 enero 2026", ultimoIngreso: "25/05/2026", notificacionesEmail: true, recordatorios: true, perfilPublico: true
   },
   {
     id: 2, nombres: "María", apellidos: "García López", correo: "profesor@ulima.edu.pe",
@@ -19,12 +19,13 @@ const USUARIOS_DEFAULT = [
     edad: "38", sexo: "Femenino", especialidad: "Ingeniería de Sistemas",
     gradoAcademico: "Magíster en Ingeniería de Software", aniosExperiencia: "12 años",
     estadoCuenta: "Activo", estudiantesAsignados: 24, testRevisados: 48, recursosCompartidos: 15,
-    historialTests: [], ultimoIngreso: "25/05/2026"
+    historialTests: [], ultimoIngreso: "25/05/2026", notificacionesEmail: true, recordatorios: true, perfilPublico: true
   },
   {
     id: 99, nombres: "Admin", apellidos: "VocaTest", correo: "admin@vocatest.pe",
     contraseña: "admin123", rol: "Admin", ciudad: "Lima", estadoCuenta: "Activo",
-    historialTests: [], ultimoIngreso: new Date().toLocaleDateString('es-PE')
+    historialTests: [], ultimoIngreso: new Date().toLocaleDateString('es-PE'),
+    notificacionesEmail: true, recordatorios: true, perfilPublico: true
   }
 ];
 
@@ -47,7 +48,15 @@ export function AppProvider({ children }) {
     }
 
     const sesionActiva = localStorage.getItem('vocatest_sesion');
-    if (sesionActiva) setUser(JSON.parse(sesionActiva));
+    if (sesionActiva) {
+      const u = JSON.parse(sesionActiva);
+      setUser({
+        ...u,
+        notificacionesEmail: u.notificacionesEmail ?? true,
+        recordatorios: u.recordatorios ?? true,
+        perfilPublico: u.perfilPublico ?? true
+      });
+    }
 
     const carreraGuardada = localStorage.getItem('carreraTemporal');
     if (carreraGuardada) setCarreraTemporal(carreraGuardada);
@@ -57,7 +66,17 @@ export function AppProvider({ children }) {
 
     const unisGuardadas = localStorage.getItem('vocatest_universidades');
     if (unisGuardadas) {
-      setUniversidades(JSON.parse(unisGuardadas));
+      const parsedUnis = JSON.parse(unisGuardadas);
+      
+      const uLima = parsedUnis.find(u => u.nombre === "Universidad de Lima");
+      const industrialTienePDF = uLima?.carreras.find(c => c.nombre === "Ingeniería Industrial")?.planEstudios;
+
+      if (!industrialTienePDF || parsedUnis[0].logo?.includes('http')) {
+        setUniversidades(universidadesData);
+        localStorage.setItem('vocatest_universidades', JSON.stringify(universidadesData));
+      } else {
+        setUniversidades(parsedUnis);
+      }
     } else {
       setUniversidades(universidadesData);
       localStorage.setItem('vocatest_universidades', JSON.stringify(universidadesData));
@@ -66,9 +85,17 @@ export function AppProvider({ children }) {
 
   const login = (correo, contraseña) => {
     const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
-    const encontrado = usuarios.find(u => u.correo === correo && u.contraseña === contraseña);
+    const correoNormalizado = correo.trim().toLowerCase();
+    const encontrado = usuarios.find(u => u.correo.toLowerCase() === correoNormalizado && u.contraseña === contraseña);
+    
     if (encontrado) {
-      const actualizado = { ...encontrado, ultimoIngreso: new Date().toLocaleDateString('es-PE') };
+      const actualizado = {
+        ...encontrado,
+        ultimoIngreso: new Date().toLocaleDateString('es-PE'),
+        notificacionesEmail: encontrado.notificacionesEmail ?? true,
+        recordatorios: encontrado.recordatorios ?? true,
+        perfilPublico: encontrado.perfilPublico ?? true
+      };
       const actualizados = usuarios.map(u => u.id === actualizado.id ? actualizado : u);
       localStorage.setItem('vocatest_usuarios', JSON.stringify(actualizados));
       setUser(actualizado);
@@ -80,26 +107,59 @@ export function AppProvider({ children }) {
 
   const register = (datosUsuario) => {
     const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
-    if (usuarios.find(u => u.correo === datosUsuario.correo)) return { ok: false, mensaje: "Este correo ya está registrado." };
+    const correoNormalizado = datosUsuario.correo.trim().toLowerCase();
+    
+    if (usuarios.find(u => u.correo.toLowerCase() === correoNormalizado)) {
+      return { ok: false, mensaje: "Este correo ya está registrado." };
+    }
 
     const ahora = new Date();
     const fechaFormateada = ahora.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+    
+    // Extraemos el rol, si no hay, por defecto es Estudiante
+    const { confirmar, rol = "Estudiante", ...datosLimpios } = datosUsuario;
+
+    const esEstudiante = rol === "Estudiante";
+
     const nuevoUsuario = {
-      ...datosUsuario, id: Date.now(), rol: "Estudiante",
-      carreraRecomendada: carreraTemporal || "",
-      carrerasRecomendadas: carreraTemporal ? [carreraTemporal] : [],
-      universidadesFavoritas: [],
-      historialTests: carreraTemporal ? [{ resultado: carreraTemporal, fecha: fechaFormateada }] : [],
-      fechaTest: carreraTemporal ? fechaFormateada : "",
-      ultimoIngreso: ahora.toLocaleDateString('es-PE')
+      ...datosLimpios, 
+      id: Date.now(), 
+      rol: rol, 
+      correo: correoNormalizado,
+      ultimoIngreso: ahora.toLocaleDateString('es-PE'),
+      notificacionesEmail: true,
+      recordatorios: true,
+      perfilPublico: true,
+
+      // Si es estudiante le asignamos las variables del test
+      ...(esEstudiante ? {
+        carreraRecomendada: carreraTemporal || "",
+        carrerasRecomendadas: carreraTemporal ? [carreraTemporal] : [],
+        universidadesFavoritas: [],
+        historialTests: carreraTemporal ? [{ resultado: carreraTemporal, fecha: fechaFormateada }] : [],
+        fechaTest: carreraTemporal ? fechaFormateada : ""
+      } : {
+        // Si es profesor le asignamos variables de docente
+        especialidad: datosLimpios.especialidad || "Educación Secundaria",
+        estadoCuenta: "Activo",
+        estudiantesAsignados: 0,
+        testRevisados: 0,
+        recursosCompartidos: 0,
+        historialTests: []
+      })
     };
 
     const actualizados = [...usuarios, nuevoUsuario];
     localStorage.setItem('vocatest_usuarios', JSON.stringify(actualizados));
     setUser(nuevoUsuario);
     localStorage.setItem('vocatest_sesion', JSON.stringify(nuevoUsuario));
-    localStorage.removeItem('carreraTemporal');
-    setCarreraTemporal("");
+    
+    // Solo borramos la carrera temporal si el que se registra es estudiante
+    if (esEstudiante) {
+      localStorage.removeItem('carreraTemporal');
+      setCarreraTemporal("");
+    }
+    
     return { ok: true };
   };
 
@@ -109,62 +169,52 @@ export function AppProvider({ children }) {
   };
 
   const guardarResultadoTest = (resultadoFinal) => {
-  // 🔥 PRIMER BLINDAJE: Forzamos la actualización inmediata del estado temporal de la carrera
-  // Esto asegura que la UI ('ResultadoTest.jsx') lea el cambio en caliente sin importar las salas
-  if (typeof setCarreraTemporal === 'function') {
-    setCarreraTemporal(resultadoFinal);
-  }
-  localStorage.setItem('carreraTemporal', resultadoFinal);
-
-  // Si no hay usuario logueado, detenemos aquí (el flujo de invitado ya se respaldó arriba)
-  if (!user) return;
-
-  const ahora = new Date();
-  const fechaFormateada = ahora.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
-  const entrada = { resultado: resultadoFinal, fecha: fechaFormateada };
-
-  const usuarioActualizado = {
-    ...user, 
-    carreraRecommended: resultadoFinal, // Mantenemos tu estructura interna
-    carreraRecomendada: resultadoFinal,
-    carrerasRecomendadas: [resultadoFinal, ...(user.carrerasRecomendadas || [])].slice(0, 5),
-    historialTests: [entrada, ...(user.historialTests || [])].slice(0, 20),
-    fechaTest: fechaFormateada
-  };
-
-  setUser(usuarioActualizado);
-  localStorage.setItem('vocatest_sesion', JSON.stringify(usuarioActualizado));
-
-  const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
-  const actualizados = usuarios.map(u => u.id === usuarioActualizado.id ? usuarioActualizado : u);
-  localStorage.setItem('vocatest_usuarios', JSON.stringify(actualizados));
-
-  const codigoSala = localStorage.getItem("vocatest_sala_actual");
-  if (codigoSala) {
-    const salasAlmacenadas = JSON.parse(localStorage.getItem("vocatest_salas") || "[]");
-    const salasActualizadas = salasAlmacenadas.map(sala => {
-      if (sala.codigo === codigoSala && sala.activa) {
-        const nuevoResultado = {
-          nombre: `${user.nombres} ${user.apellidos}`, 
-          correo: user.correo,
-          resultado: resultadoFinal, 
-          fecha: ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
-        };
-        
-        // Filtramos resultados previos del mismo correo para que se reemplace por el nuevo intento
-        const resultadosPrevios = (sala.resultados || []).filter(r => r.correo !== user.correo);
-        return { ...sala, resultados: [...resultadosPrevios, nuevoResultado] };
-      }
-      return sala;
-    });
-
-    localStorage.setItem("vocatest_salas", JSON.stringify(salasActualizadas));
-    
-    if (typeof setSalas === 'function') {
-      setSalas(salasActualizadas);
+    if (typeof setCarreraTemporal === 'function') {
+      setCarreraTemporal(resultadoFinal);
     }
-  }
-};
+    localStorage.setItem('carreraTemporal', resultadoFinal);
+
+    if (!user) return;
+
+    const ahora = new Date();
+    const fechaFormateada = ahora.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+    const entrada = { resultado: resultadoFinal, fecha: fechaFormateada };
+
+    const usuarioActualizado = {
+      ...user, 
+      carreraRecommended: resultadoFinal, 
+      carreraRecomendada: resultadoFinal,
+      carrerasRecomendadas: [resultadoFinal, ...(user.carrerasRecomendadas || [])].slice(0, 5),
+      historialTests: [entrada, ...(user.historialTests || [])].slice(0, 20),
+      fechaTest: fechaFormateada
+    };
+
+    setUser(usuarioActualizado);
+    localStorage.setItem('vocatest_sesion', JSON.stringify(usuarioActualizado));
+
+    const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
+    const actualizados = usuarios.map(u => u.id === usuarioActualizado.id ? usuarioActualizado : u);
+    localStorage.setItem('vocatest_usuarios', JSON.stringify(actualizados));
+
+    const codigoSala = localStorage.getItem("vocatest_sala_actual");
+    if (codigoSala) {
+      const salasAlmacenadas = JSON.parse(localStorage.getItem("vocatest_salas") || "[]");
+      const salasActualizadas = salasAlmacenadas.map(sala => {
+        if (sala.codigo === codigoSala && sala.activa) {
+          const nuevoResultado = {
+            nombre: `${user.nombres} ${user.apellidos}`, correo: user.correo,
+            resultado: resultadoFinal, fecha: ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+          };
+          const resultadosPrevios = (sala.resultados || []).filter(r => r.correo !== user.correo);
+          return { ...sala, resultados: [...resultadosPrevios, nuevoResultado] };
+        }
+        return sala;
+      });
+
+      localStorage.setItem("vocatest_salas", JSON.stringify(salasActualizadas));
+      if (typeof setSalas === 'function') setSalas(salasActualizadas);
+    }
+  };
 
   const marcarFavoritoContext = (nombreUniversidad) => {
     if (!user) return;
@@ -184,7 +234,6 @@ export function AppProvider({ children }) {
     localStorage.setItem('vocatest_usuarios', JSON.stringify(actualizados));
   };
 
-  // ── LÓGICA DE SALAS CON PIN ──
   const crearSala = (nombreSala, codigoPersonalizado, pin) => {
     const codigo = codigoPersonalizado ? codigoPersonalizado.toUpperCase().trim() : Math.random().toString().slice(2, 10).toUpperCase();
     const nuevaSala = { id: Date.now(), nombre: nombreSala, codigo, pin, resultados: [], activa: true, creador: user.correo };
@@ -196,6 +245,12 @@ export function AppProvider({ children }) {
 
   const cerrarSala = (codigo) => {
     const salasActualizadas = salas.map(s => s.codigo === codigo ? { ...s, activa: false } : s);
+    setSalas(salasActualizadas);
+    localStorage.setItem('vocatest_salas', JSON.stringify(salasActualizadas));
+  };
+
+  const abrirSala = (codigo) => {
+    const salasActualizadas = salas.map(s => s.codigo === codigo ? { ...s, activa: true } : s);
     setSalas(salasActualizadas);
     localStorage.setItem('vocatest_salas', JSON.stringify(salasActualizadas));
   };
@@ -222,6 +277,53 @@ export function AppProvider({ children }) {
     localStorage.setItem('vocatest_usuarios', JSON.stringify(filtrados));
   };
 
+  const actualizarPreferencias = (preferencias) => {
+    if (!user) return;
+    const usuarioActualizado = { ...user, ...preferencias };
+    setUser(usuarioActualizado);
+    localStorage.setItem("vocatest_sesion", JSON.stringify(usuarioActualizado));
+    const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
+    const actualizados = usuarios.map(u => u.id === usuarioActualizado.id ? usuarioActualizado : u);
+    localStorage.setItem('vocatest_usuarios', JSON.stringify(actualizados));
+  };
+
+  const cambiarNombre = (nombres, apellidos, passwordActual) => {
+    if (!user) return { ok: false, mensaje: "No hay sesión activa." };
+    if (user.contraseña !== passwordActual) return { ok: false, mensaje: "La contraseña es incorrecta." };
+    editarUsuario(user.id, { nombres, apellidos });
+    return { ok: true };
+  };
+
+  const cambiarCorreo = (nuevoCorreo, confirmarCorreo, passwordActual) => {
+    if (!user) return { ok: false, mensaje: "No hay sesión activa." };
+    const nuevoCorreoNormalizado = nuevoCorreo.trim().toLowerCase();
+    const confirmarCorreoNormalizado = confirmarCorreo.trim().toLowerCase();
+    if (nuevoCorreoNormalizado !== confirmarCorreoNormalizado) return { ok: false, mensaje: "Los correos no coinciden." };
+    if (user.contraseña !== passwordActual) return { ok: false, mensaje: "La contraseña es incorrecta." };
+    
+    const usuarios = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
+    if (usuarios.find(u => u.correo.toLowerCase() === nuevoCorreoNormalizado && u.id !== user.id)) {
+      return { ok: false, mensaje: "Ese correo ya está registrado." };
+    }
+    
+    editarUsuario(user.id, { correo: nuevoCorreoNormalizado });
+    return { ok: true };
+  };
+
+  const cambiarPassword = (passwordActual, nuevaPassword, confirmarPassword) => {
+    if (!user) return { ok: false, mensaje: "No hay sesión activa." };
+    if (user.contraseña !== passwordActual) return { ok: false, mensaje: "La contraseña actual es incorrecta." };
+    if (nuevaPassword !== confirmarPassword) return { ok: false, mensaje: "Las contraseñas no coinciden." };
+    
+    const regexPassword = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!regexPassword.test(nuevaPassword)) {
+      return { ok: false, mensaje: "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número." };
+    }
+    
+    editarUsuario(user.id, { contraseña: nuevaPassword });
+    return { ok: true };
+  };
+
   const agregarUniversidad = (nuevaUni) => {
     const uniConId = { ...nuevaUni, id: Date.now() };
     const unisActualizadas = [...universidades, uniConId];
@@ -229,7 +331,26 @@ export function AppProvider({ children }) {
     localStorage.setItem('vocatest_universidades', JSON.stringify(unisActualizadas));
   };
 
-  // ── NUEVA LÓGICA: BÚSQUEDA DINÁMICA DE CARRERAS ──
+  const eliminarUniversidad = (nombreUni) => {
+    const unisActualizadas = universidades.filter(u => u.nombre !== nombreUni);
+    setUniversidades(unisActualizadas);
+    localStorage.setItem('vocatest_universidades', JSON.stringify(unisActualizadas));
+  };
+
+  const eliminarCarrera = (nombreUni, nombreCarrera) => {
+    const unisActualizadas = universidades.map(uni => {
+      if (uni.nombre === nombreUni) {
+        return {
+          ...uni,
+          carreras: uni.carreras.filter(c => c.nombre !== nombreCarrera)
+        };
+      }
+      return uni;
+    });
+    setUniversidades(unisActualizadas);
+    localStorage.setItem('vocatest_universidades', JSON.stringify(unisActualizadas));
+  };
+
   const buscarCarreraGlobal = (nombreCarrera) => {
     for (const uni of universidades) {
       if (uni.carreras) {
@@ -247,9 +368,11 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={{
       user, login, register, logout, marcarFavoritoContext, guardarResultadoTest,
-      carreraTemporal, setCarreraTemporal, salas, crearSala, cerrarSala, eliminarSala, universidades, agregarUniversidad,
+      carreraTemporal, setCarreraTemporal, salas, crearSala, cerrarSala, abrirSala, eliminarSala, 
+      universidades, agregarUniversidad, eliminarUniversidad, eliminarCarrera,
       editarUsuario, eliminarUsuario,
-      buscarCarreraGlobal // <-- Agregado al Provider
+      buscarCarreraGlobal,
+      cambiarNombre, cambiarCorreo, cambiarPassword, actualizarPreferencias
     }}>
       {children}
     </AppContext.Provider>

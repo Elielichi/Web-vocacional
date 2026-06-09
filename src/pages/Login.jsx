@@ -11,9 +11,17 @@ export default function Login() {
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
 
+  const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [intentos, setIntentos] = useState(0);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
+
+    if (intentos >= 5) {
+      setError("Demasiados intentos. Vuelva más tarde.");
+      return;
+    }
 
     if (!correo || !contrasena) {
       setError('Por favor completa todos los campos.');
@@ -21,18 +29,32 @@ export default function Login() {
     }
 
     setCargando(true);
+
     setTimeout(() => {
       const resultado = login(correo, contrasena);
+
       setCargando(false);
+
       if (resultado.ok) {
-        // Redirigir según el rol
+        setIntentos(0);
+
         if (resultado.rol === "Admin") {
           navigate('/admin');
         } else {
           navigate('/perfil');
         }
       } else {
-        setError('Correo o contraseña incorrectos.');
+        const nuevosIntentos = intentos + 1;
+
+        setIntentos(nuevosIntentos);
+
+        if (nuevosIntentos >= 5) {
+          setError("Demasiados intentos. Vuelva más tarde.");
+        } else {
+          setError(
+            `Correo o contraseña incorrectos.`
+          );
+        }
       }
     }, 800);
   };
@@ -102,13 +124,22 @@ export default function Login() {
               <label className="block text-sm font-bold text-slate-700 mb-1">
                 Contraseña
               </label>
+
               <input
-                type="password"
+                type={mostrarPassword ? "text" : "password"}
                 value={contrasena}
                 onChange={(e) => setContrasena(e.target.value)}
                 placeholder="••••••••"
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all"
               />
+
+              <button
+                type="button"
+                onClick={() => setMostrarPassword(!mostrarPassword)}
+                className="text-xs text-blue-600 mt-1 hover:underline"
+              >
+                {mostrarPassword ? "Ocultar" : "Mostrar"}
+              </button>
             </div>
 
             <button

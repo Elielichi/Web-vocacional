@@ -3,16 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
-import Cambiarpassword from '../components/Cambiarpassword';
+import Cambiarpassword from '../components/cambiarpassword';
 import Cambiarcorreo from '../components/Cambiarcorreo';
-import Cambiarnombre from '../components/cambiarnombre';
+import Cambiarnombre from '../components/Cambiarnombre';
 
 const PerfilEditar = () => {
 
-  const { user, logout } = useApp();
+  const { user, logout, actualizarPreferencias } = useApp();
   const navigate = useNavigate();
 
   const [tabActiva, setTabActiva] = useState('cuenta');
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
+        <p className="text-slate-600 font-medium">
+          Debes iniciar sesión para editar tu perfil.
+        </p>
+
+        <button
+          onClick={() => navigate('/login')}
+          className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition"
+        >
+          Ir al Login
+        </button>
+      </div>
+    );
+  }
 
   const handleLogout = () => {
     logout();
@@ -27,15 +44,11 @@ const PerfilEditar = () => {
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
-
       <Navbar />
-
       <main className="flex-1 p-4 md:p-6">
 
-      
         <div className="max-w-5xl mx-auto">
 
-         
           <div className="mb-6">
             <h1 className="text-3xl font-black text-slate-900">
               Configuración de Perfil
@@ -46,18 +59,16 @@ const PerfilEditar = () => {
             </p>
           </div>
 
-     
           <div className="flex gap-2 bg-white rounded-2xl p-2 shadow-sm border border-slate-200 overflow-x-auto mb-6">
 
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setTabActiva(tab.id)}
-                className={`flex-1 min-w-max px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  tabActiva === tab.id
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-slate-500 hover:bg-slate-50'
-                }`}
+                className={`flex-1 min-w-max px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${tabActiva === tab.id
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-slate-500 hover:bg-slate-50'
+                  }`}
               >
                 {tab.label}
               </button>
@@ -69,59 +80,59 @@ const PerfilEditar = () => {
 
             {tabActiva === 'cuenta' && (
 
-  <div className="space-y-6">
+              <div className="space-y-6">
 
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-5">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-5">
 
-      <div>
-        <p className="text-slate-900 font-semibold">
-          Nombre
-        </p>
-      </div>
+                  <div>
+                    <p className="text-slate-900 font-semibold">
+                      Nombre
+                    </p>
+                  </div>
 
-      <div className="flex items-center gap-3">
-        <span className="text-slate-600">
-          Carlos Mendoza Torres
-        </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-slate-600">
+                      {user?.nombres} {user?.apellidos}
+                    </span>
 
-       <Cambiarnombre/>
-      </div>
+                    <Cambiarnombre />
+                  </div>
 
-    </div>
+                </div>
 
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-5">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-5">
 
-      <div>
-        <p className="text-slate-900 font-semibold">
-          Contraseña
-        </p>
-        
-      </div>
-<Cambiarpassword/>
-     
-    </div>
+                  <div>
+                    <p className="text-slate-900 font-semibold">
+                      Contraseña
+                    </p>
 
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  </div>
+                  <Cambiarpassword />
 
-      <div>
-        <p className="text-slate-900 font-semibold">
-          Correo electrónico
-        </p>
-      </div>
+                </div>
 
-      <div className="flex items-center gap-3 break-all">
-        <span className="text-slate-600">
-          estudiante@ulima.edu.pe
-        </span>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
 
-<Cambiarcorreo/>
-      </div>
+                  <div>
+                    <p className="text-slate-900 font-semibold">
+                      Correo electrónico
+                    </p>
+                  </div>
 
-    </div>
+                  <div className="flex items-center gap-3 break-all">
+                    <span className="text-slate-600">
+                      {user?.correo}
+                    </span>
 
-  </div>
+                    <Cambiarcorreo />
+                  </div>
 
-)}
+                </div>
+
+              </div>
+
+            )}
 
             {tabActiva === 'notificaciones' && (
               <div className="space-y-4">
@@ -137,7 +148,14 @@ const PerfilEditar = () => {
                     </p>
                   </div>
 
-                  <input type="checkbox" className="w-5 h-5" />
+                  <input
+                    type="checkbox"
+                    checked={user?.notificacionesEmail ?? false}
+                    onChange={(e) =>
+                      actualizarPreferencias({ notificacionesEmail: e.target.checked })
+                    }
+                    className="w-5 h-5"
+                  />
                 </div>
 
                 <div className="flex justify-between items-center">
@@ -151,7 +169,14 @@ const PerfilEditar = () => {
                     </p>
                   </div>
 
-                  <input type="checkbox" className="w-5 h-5" />
+                  <input
+                    type="checkbox"
+                    checked={user?.recordatorios ?? false}
+                    onChange={(e) =>
+                      actualizarPreferencias({ recordatorios: e.target.checked })
+                    }
+                    className="w-5 h-5"
+                  />
                 </div>
 
               </div>
@@ -171,8 +196,13 @@ const PerfilEditar = () => {
                     </p>
                   </div>
 
-                  <input type="checkbox" className="w-5 h-5" />
-                </div>
+                  <input
+                    type="checkbox"
+                    checked={user?.perfilPublico ?? false} onChange={(e) =>
+                      actualizarPreferencias({ perfilPublico: e.target.checked })
+                    }
+                    className="w-5 h-5"
+                  />                </div>
 
                 <button
                   onClick={handleLogout}
