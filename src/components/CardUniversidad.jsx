@@ -82,7 +82,7 @@ function CardUniversidad({ logo, nombre, tipo, carreras, escalas, webOficial, ub
             <div className="flex gap-2">
               {/* Botón Favorito (Solo para Estudiantes) */}
               {user && user.rol !== "Admin" && user.rol !== "Profesor" && (
-                <button onClick={handleToggleFavorito} title={esFavorito ? "Quitar de favoritos" : "Agregar a favoritos"} className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 shrink-0 ${esFavorito ? "bg-red-50 text-red-500 border border-red-200 hover:bg-red-100" : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"}`}>
+                <button type="button" onClick={handleToggleFavorito} title={esFavorito ? "Quitar de favoritos" : "Agregar a favoritos"} className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 shrink-0 ${esFavorito ? "bg-red-50 text-red-500 border border-red-200 hover:bg-red-100" : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"}`}>
                   <svg viewBox="0 0 24 24" className={`w-4 h-4 transition-all ${esFavorito ? "fill-red-500 stroke-red-500" : "fill-none stroke-slate-400"}`} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>
                   {esFavorito ? "Guardado" : "Favorito"}
                 </button>
@@ -90,7 +90,7 @@ function CardUniversidad({ logo, nombre, tipo, carreras, escalas, webOficial, ub
 
               {/* Botón Eliminar Univ (Solo para Admin) */}
               {isAdmin && (
-                <button onClick={onEliminarUni} title="Eliminar universidad completa" className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 shrink-0 bg-red-900/40 text-red-400 border border-red-800 hover:bg-red-600 hover:text-white cursor-pointer`}>
+                <button type="button" onClick={onEliminarUni} title="Eliminar universidad completa" className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 shrink-0 bg-red-900/40 text-red-400 border border-red-800 hover:bg-red-600 hover:text-white cursor-pointer`}>
                   🗑️ Eliminar Univ.
                 </button>
               )}
@@ -101,12 +101,12 @@ function CardUniversidad({ logo, nombre, tipo, carreras, escalas, webOficial, ub
 
       {/* ── BOTONES DE ACCIÓN ────────────────────────────── */}
       <div className="flex items-center gap-3 px-6 pb-4 flex-wrap">
-        <button onClick={() => setMostrarCarreras(!mostrarCarreras)} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold transition cursor-pointer">
+        <button type="button" onClick={() => setMostrarCarreras(!mostrarCarreras)} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold transition cursor-pointer">
           {mostrarCarreras ? "Ocultar carreras" : `Ver ${carreras.length} carreras`}
         </button>
 
         {escalas && escalas.length > 0 && (
-          <button onClick={() => setMostrarEscalas(!mostrarEscalas)} className={`${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} px-5 py-2 rounded-lg text-sm font-bold transition cursor-pointer`}>
+          <button type="button" onClick={() => setMostrarEscalas(!mostrarEscalas)} className={`${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} px-5 py-2 rounded-lg text-sm font-bold transition cursor-pointer`}>
             {mostrarEscalas ? "Ocultar costos" : "Ver escalas de pago"}
           </button>
         )}
@@ -118,7 +118,7 @@ function CardUniversidad({ logo, nombre, tipo, carreras, escalas, webOficial, ub
         )}
 
         {esFavorito && user && (
-          <button onClick={irAFavoritos} className="text-red-500 text-xs font-medium hover:underline ml-auto cursor-pointer">Ver mis favoritos →</button>
+          <button type="button" onClick={irAFavoritos} className="text-red-500 text-xs font-medium hover:underline ml-auto cursor-pointer">Ver mis favoritos →</button>
         )}
       </div>
 
@@ -166,7 +166,7 @@ function CardUniversidad({ logo, nombre, tipo, carreras, escalas, webOficial, ub
 
                   {/* Botón Eliminar Carrera (Solo para Admin) */}
                   {isAdmin && (
-                    <button onClick={() => onEliminarCarrera(carrera.nombre)} className={`text-xs font-bold px-3 py-1.5 rounded-lg transition border flex items-center gap-1 bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20 cursor-pointer`}>
+                    <button type="button" onClick={() => onEliminarCarrera(carrera.nombre)} className={`text-xs font-bold px-3 py-1.5 rounded-lg transition border flex items-center gap-1 bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20 cursor-pointer`}>
                       🗑️ Eliminar
                     </button>
                   )}

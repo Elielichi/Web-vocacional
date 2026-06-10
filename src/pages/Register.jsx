@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
@@ -162,30 +162,30 @@ export default function Register() {
             {/* Fila nombres */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Nombres *</label>
-                <input name="nombres" onChange={handleChange} placeholder="Ej. Carlos"
+                <label htmlFor="register-nombres" className="block text-sm font-bold text-slate-700 mb-1">Nombres *</label>
+                <input id="register-nombres" name="nombres" onChange={handleChange} placeholder="Ej. Carlos"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Apellidos *</label>
-                <input name="apellidos" onChange={handleChange} placeholder="Ej. Mendoza"
+                <label htmlFor="register-apellidos" className="block text-sm font-bold text-slate-700 mb-1">Apellidos *</label>
+                <input id="register-apellidos" name="apellidos" onChange={handleChange} placeholder="Ej. Mendoza"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-1">Correo electrónico *</label>
-              <input name="correo" type="email" onChange={handleChange} placeholder="tucorreo@ulima.edu.pe"
+              <label htmlFor="register-correo" className="block text-sm font-bold text-slate-700 mb-1">Correo electrónico *</label>
+              <input id="register-correo" name="correo" type="email" onChange={handleChange} placeholder="tucorreo@ulima.edu.pe"
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">
+                <label htmlFor="register-contrasena" className="block text-sm font-bold text-slate-700 mb-1">
                   Contraseña *
                 </label>
 
-                <input
+                <input aria-label="••••••••"
                   name="contraseña"
                   value={form.contraseña}
                   type={mostrarPass ? "text" : "password"}
@@ -218,11 +218,11 @@ export default function Register() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">
+                <label htmlFor="register-confirmar" className="block text-sm font-bold text-slate-700 mb-1">
                   Confirmar *
                 </label>
 
-                <input
+                <input id="register-confirmar"
                   name="confirmar"
                   value={form.confirmar}
                   type={mostrarConfirmar ? "text" : "password"}
@@ -256,26 +256,26 @@ export default function Register() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Ciudad</label>
-                <input name="ciudad" onChange={handleChange} placeholder="Lima"
+                <label htmlFor="register-ciudad" className="block text-sm font-bold text-slate-700 mb-1">Ciudad</label>
+                <input id="register-ciudad" name="ciudad" onChange={handleChange} placeholder="Lima"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Teléfono</label>
-                <input name="telefono" onChange={handleChange} placeholder="9XX-XXX-XXX"
+                <label htmlFor="register-telefono" className="block text-sm font-bold text-slate-700 mb-1">Teléfono</label>
+                <input id="register-telefono" name="telefono" onChange={handleChange} placeholder="9XX-XXX-XXX"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Edad</label>
-                <input name="edad" type="number" onChange={handleChange} placeholder="17"
+                <label htmlFor="register-edad" className="block text-sm font-bold text-slate-700 mb-1">Edad</label>
+                <input id="register-edad" name="edad" type="number" onChange={handleChange} placeholder="17"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all" />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Sexo</label>
-                <select name="sexo" onChange={handleChange}
+                <label htmlFor="register-sexo" className="block text-sm font-bold text-slate-700 mb-1">Sexo</label>
+                <select id="register-sexo" name="sexo" onChange={handleChange}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all bg-white">
                   <option value="">Seleccionar</option>
                   <option>Masculino</option>
@@ -286,8 +286,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-1">Tipo de colegio de procedencia</label>
-              <select name="tipoColegio" onChange={handleChange}
+              <label htmlFor="register-tipo-colegio" className="block text-sm font-bold text-slate-700 mb-1">Tipo de colegio de procedencia</label>
+              <select id="register-tipo-colegio" name="tipoColegio" onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 font-medium transition-all bg-white">
                 <option value="">Seleccionar tipo</option>
                 <option>Público</option>

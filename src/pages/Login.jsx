@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
@@ -108,10 +108,11 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-1">
+              <label htmlFor="login-correo" className="block text-sm font-bold text-slate-700 mb-1">
                 Correo electrónico
               </label>
               <input
+                id="login-correo"
                 type="email"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
@@ -121,11 +122,12 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-1">
+              <label htmlFor="login-contrasena" className="block text-sm font-bold text-slate-700 mb-1">
                 Contraseña
               </label>
 
               <input
+                id="login-contrasena"
                 type={mostrarPassword ? "text" : "password"}
                 value={contrasena}
                 onChange={(e) => setContrasena(e.target.value)}

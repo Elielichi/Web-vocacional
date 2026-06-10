@@ -65,7 +65,7 @@ export default function SalaEstudiante() {
           </p>
 
           {/* Input de código */}
-          <input
+          <input aria-label="Campo"
             value={codigo}
             onChange={handleChange}
             onKeyDown={e => e.key === "Enter" && unirse()}
@@ -95,7 +95,7 @@ export default function SalaEstudiante() {
           )}
 
           {/* Botón */}
-          <button
+          <button type="button"
             onClick={unirse}
             disabled={codigo.length !== 8 || !user || cargando}
             className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-md"

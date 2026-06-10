@@ -62,7 +62,7 @@ const Cambiarpassword = () => {
     return (
         <div>
 
-            <button
+            <button type="button"
                 onClick={() => setAbierto(true)}
                 className="text-blue-600 font-bold hover:text-blue-700 transition-all cursor-pointer"
             >
@@ -72,7 +72,7 @@ const Cambiarpassword = () => {
             {abierto && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
                     <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 relative animate-fadeIn">
-                        <button
+                        <button type="button"
                             onClick={() => setAbierto(false)}
                             className="absolute top-4 right-4 text-slate-500 hover:text-black text-xl"
                         >
@@ -99,7 +99,7 @@ const Cambiarpassword = () => {
                                 <p className="text-sm font-semibold text-slate-700 mb-2">
                                     Contraseña actual
                                 </p>
-                                <input
+                                <input aria-label="password"
                                     type="password"
                                     value={passwordActual}
                                     onChange={(e) => setPasswordActual(e.target.value)}
@@ -111,7 +111,7 @@ const Cambiarpassword = () => {
                                 <p className="text-sm font-semibold text-slate-700 mb-2">
                                     Contraseña nueva
                                 </p>
-                                <input
+                                <input aria-label="password"
                                     type="password"
                                     value={nuevaPassword}
                                     onChange={(e) => setNuevaPassword(e.target.value)}
@@ -123,7 +123,7 @@ const Cambiarpassword = () => {
                                 <p className="text-sm font-semibold text-slate-700 mb-2">
                                     Vuelva a introducir la contraseña
                                 </p>
-                                <input
+                                <input aria-label="password"
                                     type="password"
                                     value={confirmarPassword}
                                     onChange={(e) => setConfirmarPassword(e.target.value)}
@@ -132,14 +132,14 @@ const Cambiarpassword = () => {
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                                <button
+                                <button type="button"
                                     onClick={handleGuardar}
                                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-bold transition-all"
                                 >
                                     Guardar
                                 </button>
 
-                                <button
+                                <button type="button"
                                     onClick={() => setAbierto(false)}
                                     className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-3 rounded-xl font-bold transition-all"
                                 >

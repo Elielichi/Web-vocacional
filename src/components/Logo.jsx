@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function LogoVocatest({ className = "w-16 h-16" }) {
   return (

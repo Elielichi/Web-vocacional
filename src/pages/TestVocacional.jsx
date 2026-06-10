@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Footer from '../components/footer';
@@ -311,7 +311,7 @@ export default function TestVocacional() {
           {/* Opciones */}
           <div className="grid gap-4">
             {preguntas[currentPregunta].opciones.map((opcion, index) => (
-              <button
+              <button type="button"
                 key={index}
                 onClick={() => handleOpcionSeleccionada(opcion.categoria)}
                 className="w-full text-left bg-slate-50 hover:bg-gradient-to-r hover:from-blue-50/40 hover:to-teal-50/40 border-2 border-slate-100 hover:border-blue-400 p-5 rounded-2xl font-medium text-slate-700 hover:text-blue-900 transition-all duration-200 shadow-xs flex items-center gap-4 group cursor-pointer"

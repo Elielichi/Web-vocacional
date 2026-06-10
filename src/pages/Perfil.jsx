@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Navbar from '../components/navbar';
@@ -75,13 +75,13 @@ export default function Perfil() {
           </div>
           <div className="flex flex-col gap-2 items-end">
             {/* Botón Editar Perfil */}
-            <button
+            <button type="button"
               onClick={() => navigate('/EditarPerfil')}
               className="bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-sm px-5 py-2.5 rounded-xl transition border border-blue-200 flex items-center gap-2"
             >
               ✏️ Editar Perfil
             </button>
-            <button
+            <button type="button"
               onClick={handleLogout}
               className="bg-red-50 hover:bg-red-100 text-red-600 font-bold text-sm px-5 py-2.5 rounded-xl transition border border-red-200"
             >
@@ -93,7 +93,7 @@ export default function Perfil() {
         {/* ── Tabs ──────────────────────────────────────── */}
         <div className="flex gap-2 bg-white rounded-2xl p-2 shadow-sm border border-slate-100 overflow-x-auto">
           {tabs.map(tab => (
-            <button
+            <button type="button"
               key={tab.id}
               onClick={() => setTabActiva(tab.id)}
               className={`flex-1 min-w-max px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${tabActiva === tab.id
@@ -162,7 +162,7 @@ export default function Perfil() {
                 </div>
               </div>
 
-              <button
+              <button type="button"
                 onClick={() => navigate('/EditarPerfil')}
                 className="w-full mt-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 font-bold text-sm px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2"
               >

@@ -48,7 +48,7 @@ function Directorio() {
         <div className="flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto mb-8">
           {/* Buscador */}
           <div className="relative flex-1">
-            <input
+            <input aria-label="text"
               type="text"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
@@ -67,7 +67,7 @@ function Directorio() {
           {/* Filtro tipo */}
           <div className="flex gap-2">
             {["Todas", "Privada", "Pública"].map(t => (
-              <button
+              <button type="button"
                 key={t}
                 onClick={() => setFiltroTipo(t)}
                 className={`px-4 py-2 rounded-xl text-sm font-bold transition ${filtroTipo === t
@@ -115,7 +115,7 @@ function Directorio() {
             <p className="text-sm mt-2">
               Intenta con otro término como "Medicina", "Privada" o "PUCP"
             </p>
-            <button
+            <button type="button"
               onClick={() => { setBusqueda(""); setFiltroTipo("Todas"); }}
               className="mt-6 bg-blue-600 text-white px-6 py-2.5 rounded-xl hover:bg-blue-700 transition font-semibold"
             >

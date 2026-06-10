@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Navbar from '../components/navbar';
@@ -13,7 +13,7 @@ export default function AdminDashboard() {
   const [codigoSala, setCodigoSala] = useState('');
   const [pinSala, setPinSala] = useState(''); 
 
-  const [listaUsuarios, setListaUsuarios] = useState([]);
+  const [listaUsuarios, setListaUsuarios] = useState(() => JSON.parse(localStorage.getItem('vocatest_usuarios:v1') ?? localStorage.getItem('vocatest_usuarios') ?? '[]'));
   const [editandoId, setEditandoId] = useState(null);
   const [datosEdicion, setDatosEdicion] = useState({});
 
@@ -26,13 +26,6 @@ export default function AdminDashboard() {
   const [modalUsuario, setModalUsuario] = useState({ visible: false, id: null, nombre: '' });
   const [modalUni, setModalUni] = useState({ visible: false, nombre: '' });
   const [modalCarrera, setModalCarrera] = useState({ visible: false, uni: '', carrera: '' });
-
-  useEffect(() => {
-    if (user && user.rol === 'Admin') {
-      const usersDB = JSON.parse(localStorage.getItem('vocatest_usuarios') || '[]');
-      setListaUsuarios(usersDB);
-    }
-  }, [user]);
 
   if (!user || (user.rol !== 'Admin' && user.rol !== 'Profesor')) {
     return <div className="p-10 text-center text-red-500 font-bold">Acceso denegado. Área exclusiva para Docentes y Administradores.</div>;
@@ -170,14 +163,14 @@ export default function AdminDashboard() {
           <div className="flex flex-col sm:flex-row items-end sm:items-center gap-3">
             <div className={`flex rounded-lg p-1 border ${theme.navBg}`}>
               {esAdmin && (
-                <button onClick={() => setTab('usuarios')} className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${tab === 'usuarios' ? theme.btnTabActive : theme.btnTabInactive}`}>Usuarios</button>
+                <button type="button" onClick={() => setTab('usuarios')} className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${tab === 'usuarios' ? theme.btnTabActive : theme.btnTabInactive}`}>Usuarios</button>
               )}
-              <button onClick={() => setTab('salas')} className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${tab === 'salas' ? theme.btnTabActive : theme.btnTabInactive}`}>Salas Activas</button>
-              <button onClick={() => setTab('directorio')} className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${tab === 'directorio' ? theme.btnTabActive : theme.btnTabInactive}`}>Directorio</button>
+              <button type="button" onClick={() => setTab('salas')} className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${tab === 'salas' ? theme.btnTabActive : theme.btnTabInactive}`}>Salas Activas</button>
+              <button type="button" onClick={() => setTab('directorio')} className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${tab === 'directorio' ? theme.btnTabActive : theme.btnTabInactive}`}>Directorio</button>
               
               {/* 🔥 AQUÍ ESTÁ LA SOLUCIÓN: Una pestaña nativa integrada solo para Profesores */}
               {!esAdmin && (
-                <button 
+                <button type="button" 
                   onClick={() => navigate('/perfil')} 
                   className={`px-4 py-2 rounded-md text-sm font-bold transition-all cursor-pointer ${theme.btnTabInactive} hover:text-blue-600`}
                 >
@@ -196,16 +189,16 @@ export default function AdminDashboard() {
                 <h2 className={`text-xl font-bold mb-4 ${theme.cardTitle}`}>Nueva Sala de Evaluación</h2>
                 <form onSubmit={handleCrearSala} className="space-y-4">
                   <div>
-                    <label className={`block text-sm font-medium mb-1 ${theme.headerSub}`}>Nombre del Grupo / Aula *</label>
-                    <input type="text" required value={nombreSala} onChange={(e)=>setNombreSala(e.target.value)} placeholder="Ej. 5to Secundaria A" className={`w-full rounded-xl px-4 py-3 outline-none mb-3 border ${theme.inputBg}`}/>
+                    <label htmlFor="admin-nombre-sala" className={`block text-sm font-medium mb-1 ${theme.headerSub}`}>Nombre del Grupo / Aula *</label>
+                    <input id="admin-nombre-sala" type="text" required value={nombreSala} onChange={(e)=>setNombreSala(e.target.value)} placeholder="Ej. 5to Secundaria A" className={`w-full rounded-xl px-4 py-3 outline-none mb-3 border ${theme.inputBg}`}/>
                   </div>
                   <div>
-                    <label className={`block text-sm font-medium mb-1 ${theme.headerSub}`}>Código Personalizado (Opcional)</label>
-                    <input type="text" maxLength="8" value={codigoSala} onChange={(e)=>setCodigoSala(e.target.value)} placeholder="Ej. PROMO26" className={`w-full rounded-xl px-4 py-3 outline-none uppercase font-mono tracking-widest border ${theme.inputBg}`}/>
+                    <label htmlFor="admin-codigo-sala" className={`block text-sm font-medium mb-1 ${theme.headerSub}`}>Código Personalizado (Opcional)</label>
+                    <input id="admin-codigo-sala" type="text" maxLength="8" value={codigoSala} onChange={(e)=>setCodigoSala(e.target.value)} placeholder="Ej. PROMO26" className={`w-full rounded-xl px-4 py-3 outline-none uppercase font-mono tracking-widest border ${theme.inputBg}`}/>
                   </div>
                   <div>
-                    <label className={`block text-sm font-medium mb-1 ${theme.headerSub}`}>PIN de Seguridad (4 dígitos) *</label>
-                    <input type="text" required maxLength="4" pattern="\d{4}" value={pinSala} onChange={(e)=>setPinSala(e.target.value.replace(/\D/g, ''))} placeholder="Ej. 1234" className={`w-full rounded-xl px-4 py-3 outline-none border ${theme.inputBg}`}/>
+                    <label htmlFor="admin-pin-sala" className={`block text-sm font-medium mb-1 ${theme.headerSub}`}>PIN de Seguridad (4 dígitos) *</label>
+                    <input id="admin-pin-sala" type="text" required maxLength="4" pattern="\d{4}" value={pinSala} onChange={(e)=>setPinSala(e.target.value.replace(/\D/g, ''))} placeholder="Ej. 1234" className={`w-full rounded-xl px-4 py-3 outline-none border ${theme.inputBg}`}/>
                   </div>
                   <button type="submit" className={`w-full text-white font-bold py-3 rounded-xl transition-all cursor-pointer ${theme.btnPrimary}`}>
                     Crear Sala Protegida
@@ -257,22 +250,22 @@ export default function AdminDashboard() {
                       <div className="flex gap-2 flex-wrap border-t border-slate-300/10 pt-4">
                         {(esAdmin || esCreador) && (
                           sala.activa ? (
-                            <button onClick={() => cerrarSala(sala.codigo)} className="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm cursor-pointer">
+                            <button type="button" onClick={() => cerrarSala(sala.codigo)} className="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm cursor-pointer">
                               Cerrar Sala
                             </button>
                           ) : (
-                            <button onClick={() => abrirSala(sala.codigo)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm cursor-pointer">
+                            <button type="button" onClick={() => abrirSala(sala.codigo)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm cursor-pointer">
                               Reabrir Sala
                             </button>
                           )
                         )}
                         {(esAdmin || esCreador) && (
-                          <button onClick={() => handleDescargarTXT(sala)} className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 cursor-pointer">
+                          <button type="button" onClick={() => handleDescargarTXT(sala)} className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 cursor-pointer">
                             📄 Descargar TXT
                           </button>
                         )}
                         {(esAdmin || esCreador) && (
-                          <button onClick={() => iniciarBorradoSala(sala)} className="bg-red-900/50 hover:bg-red-800 border border-red-800 text-red-200 px-4 py-2 rounded-lg text-sm font-bold transition ml-auto cursor-pointer">
+                          <button type="button" onClick={() => iniciarBorradoSala(sala)} className="bg-red-900/50 hover:bg-red-800 border border-red-800 text-red-200 px-4 py-2 rounded-lg text-sm font-bold transition ml-auto cursor-pointer">
                             Eliminar Aula
                           </button>
                         )}
@@ -305,18 +298,18 @@ export default function AdminDashboard() {
                       {editandoId === u.id ? (
                         <>
                           <td className="py-4">
-                            <input type="text" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded w-full mb-1" value={datosEdicion.nombres} onChange={e=>setDatosEdicion({...datosEdicion, nombres: e.target.value})} />
-                            <input type="text" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded w-full" value={datosEdicion.apellidos} onChange={e=>setDatosEdicion({...datosEdicion, apellidos: e.target.value})} />
+                            <input aria-label="text" type="text" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded w-full mb-1" value={datosEdicion.nombres} onChange={e=>setDatosEdicion({...datosEdicion, nombres: e.target.value})} />
+                            <input aria-label="text" type="text" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded w-full" value={datosEdicion.apellidos} onChange={e=>setDatosEdicion({...datosEdicion, apellidos: e.target.value})} />
                           </td>
-                          <td className="py-4 px-2"><input type="email" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded w-full" value={datosEdicion.correo} onChange={e=>setDatosEdicion({...datosEdicion, correo: e.target.value})} /></td>
+                          <td className="py-4 px-2"><input aria-label="email" type="email" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded w-full" value={datosEdicion.correo} onChange={e=>setDatosEdicion({...datosEdicion, correo: e.target.value})} /></td>
                           <td className="py-4 px-2">
-                            <select className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded" value={datosEdicion.rol} onChange={e=>setDatosEdicion({...datosEdicion, rol: e.target.value})}>
+                            <select aria-label="Campo" className="bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded" value={datosEdicion.rol} onChange={e=>setDatosEdicion({...datosEdicion, rol: e.target.value})}>
                               <option>Estudiante</option><option>Profesor</option><option>Admin</option>
                             </select>
                           </td>
                           <td className="py-4 text-right space-x-2">
-                            <button onClick={()=>guardarEdicion(u.id)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-sm font-bold cursor-pointer">Guardar</button>
-                            <button onClick={()=>setEditandoId(null)} className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded text-sm font-bold cursor-pointer">Cancelar</button>
+                            <button type="button" onClick={()=>guardarEdicion(u.id)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-sm font-bold cursor-pointer">Guardar</button>
+                            <button type="button" onClick={()=>setEditandoId(null)} className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded text-sm font-bold cursor-pointer">Cancelar</button>
                           </td>
                         </>
                       ) : (
@@ -327,9 +320,9 @@ export default function AdminDashboard() {
                             <span className={`px-2 py-1 rounded text-xs font-bold ${u.rol==='Admin' ? 'bg-indigo-500/20 text-indigo-400' : u.rol==='Profesor' ? 'bg-purple-500/20 text-purple-400' : 'bg-slate-800 text-slate-400'}`}>{u.rol}</span>
                           </td>
                           <td className="py-4 text-right space-x-2">
-                            <button onClick={()=>iniciarEdicion(u)} className="text-indigo-400 hover:text-indigo-300 text-sm font-bold cursor-pointer">Editar</button>
+                            <button type="button" onClick={()=>iniciarEdicion(u)} className="text-indigo-400 hover:text-indigo-300 text-sm font-bold cursor-pointer">Editar</button>
                             {u.id !== user.id && (
-                              <button 
+                              <button type="button" 
                                 onClick={() => setModalUsuario({ visible: true, id: u.id, nombre: `${u.nombres} ${u.apellidos}` })} 
                                 className="text-red-400 hover:text-red-300 text-sm font-bold cursor-pointer"
                               >
@@ -379,7 +372,7 @@ export default function AdminDashboard() {
 
             {esAdmin && (
               <div className="mt-8 text-center border-t border-slate-300/20 pt-8">
-                <button onClick={() => setMostrarModalUni(true)} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg cursor-pointer">+ Agregar Nueva Universidad</button>
+                <button type="button" onClick={() => setMostrarModalUni(true)} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg cursor-pointer">+ Agregar Nueva Universidad</button>
               </div>
             )}
           </div>
@@ -394,7 +387,7 @@ export default function AdminDashboard() {
       {modalPin.visible && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className={`rounded-3xl p-8 w-full max-w-sm shadow-2xl relative border ${theme.cardBg}`}>
-            <button 
+            <button type="button" 
               onClick={() => setModalPin({ visible: false, sala: null, pin: '' })} 
               className={`absolute top-4 right-5 text-xl font-bold transition-colors cursor-pointer ${theme.headerSub} hover:text-red-500`}
             >
@@ -407,11 +400,11 @@ export default function AdminDashboard() {
                 {esAdmin ? `Ingrese el PIN de la sala "${modalPin.sala?.nombre}". (Admin: '0000')` : `Ingrese su PIN de 4 dígitos para eliminar la sala "${modalPin.sala?.nombre}":`}
               </p>
             </div>
-            <input type="password" maxLength="4" value={modalPin.pin} onChange={(e) => setModalPin({ ...modalPin, pin: e.target.value.replace(/\D/g, '') })} placeholder="••••" className={`w-full rounded-2xl px-4 py-4 text-center text-3xl tracking-[0.5em] font-mono mb-2 border-2 transition-all outline-none ${theme.inputBg} focus:border-red-500`} autoFocus />
+            <input aria-label="PIN de seguridad" type="password" maxLength="4" value={modalPin.pin} onChange={(e) => setModalPin({ ...modalPin, pin: e.target.value.replace(/\D/g, '') })} placeholder="••••" className={`w-full rounded-2xl px-4 py-4 text-center text-3xl tracking-[0.5em] font-mono mb-2 border-2 transition-all outline-none ${theme.inputBg} focus:border-red-500`} />
             {errorPin && <p className="text-red-500 text-xs font-bold text-center mb-4 animate-pulse">{errorPin}</p>}
             <div className="flex gap-3 mt-6">
-              <button onClick={() => setModalPin({ visible: false, sala: null, pin: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
-              <button onClick={confirmarBorradoSala} disabled={modalPin.pin.length !== 4} className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Eliminar</button>
+              <button type="button" onClick={() => setModalPin({ visible: false, sala: null, pin: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
+              <button type="button" onClick={confirmarBorradoSala} disabled={modalPin.pin.length !== 4} className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Eliminar</button>
             </div>
           </div>
         </div>
@@ -427,8 +420,8 @@ export default function AdminDashboard() {
               <p className={`text-sm ${theme.headerSub}`}>¿Estás seguro de eliminar a <strong>{modalUsuario.nombre}</strong> del sistema? Esta acción no se puede deshacer.</p>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={() => setModalUsuario({ visible: false, id: null, nombre: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
-              <button onClick={confirmarBorrarUsuario} className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Eliminar</button>
+              <button type="button" onClick={() => setModalUsuario({ visible: false, id: null, nombre: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
+              <button type="button" onClick={confirmarBorrarUsuario} className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Eliminar</button>
             </div>
           </div>
         </div>
@@ -444,8 +437,8 @@ export default function AdminDashboard() {
               <p className={`text-sm ${theme.headerSub}`}>¿Estás seguro de eliminar <strong>{modalUni.nombre}</strong> por completo? Esto borrará todas sus carreras para todos los alumnos.</p>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={() => setModalUni({ visible: false, nombre: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
-              <button onClick={confirmarBorrarUni} className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Aceptar</button>
+              <button type="button" onClick={() => setModalUni({ visible: false, nombre: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
+              <button type="button" onClick={confirmarBorrarUni} className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Aceptar</button>
             </div>
           </div>
         </div>
@@ -461,8 +454,8 @@ export default function AdminDashboard() {
               <p className={`text-sm ${theme.headerSub}`}>¿Deseas eliminar <strong>{modalCarrera.carrera}</strong> de la universidad <strong>{modalCarrera.uni}</strong>?</p>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={() => setModalCarrera({ visible: false, uni: '', carrera: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
-              <button onClick={confirmarBorrarCarrera} className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Aceptar</button>
+              <button type="button" onClick={() => setModalCarrera({ visible: false, uni: '', carrera: '' })} className={`flex-1 font-bold py-3 rounded-xl transition-all border cursor-pointer ${esAdmin ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'}`}>Cancelar</button>
+              <button type="button" onClick={confirmarBorrarCarrera} className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md cursor-pointer">Aceptar</button>
             </div>
           </div>
         </div>
@@ -472,37 +465,37 @@ export default function AdminDashboard() {
       {mostrarModalUni && esAdmin && (
         <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl relative">
-            <button onClick={() => setMostrarModalUni(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white font-bold text-xl cursor-pointer">✕</button>
+            <button type="button" onClick={() => setMostrarModalUni(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white font-bold text-xl cursor-pointer">✕</button>
             <h2 className="text-2xl font-black text-white mb-6">Registrar Institución</h2>
             <div className="space-y-4 mb-6 pb-6 border-b border-slate-800">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-1">Nombre de la Universidad *</label>
-                  <input type="text" value={formUni.nombre} onChange={e => setFormUni({...formUni, nombre: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-indigo-500 outline-none" placeholder="Ej. Universidad de Lima" />
+                  <label htmlFor="admin-universidad-nombre" className="block text-sm font-medium text-slate-300 mb-1">Nombre de la Universidad *</label>
+                <input id="admin-universidad-nombre" type="text" value={formUni.nombre} onChange={e => setFormUni({...formUni, nombre: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-indigo-500 outline-none" placeholder="Ej. Universidad de Lima" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-1">Tipo de Institución</label>
-                  <select value={formUni.tipo} onChange={e => setFormUni({...formUni, tipo: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-indigo-500 outline-none">
+                  <label htmlFor="admin-universidad-tipo" className="block text-sm font-medium text-slate-300 mb-1">Tipo de Institución</label>
+                  <select id="admin-universidad-tipo" value={formUni.tipo} onChange={e => setFormUni({...formUni, tipo: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-indigo-500 outline-none">
                     <option>Privada</option><option>Pública</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1">Subir Logo (Archivo PNG/JPG)</label>
-                <input type="file" accept="image/png, image/jpeg" onChange={procesarLogoBase64} className="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer" />
+                <label htmlFor="admin-universidad-logo" className="block text-sm font-medium text-slate-300 mb-1">Subir Logo (Archivo PNG/JPG)</label>
+                <input id="admin-universidad-logo" type="file" accept="image/png, image/jpeg" onChange={procesarLogoBase64} className="w-full text-slate-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer" />
               </div>
             </div>
             <h3 className="text-lg font-bold text-indigo-400 mb-4">Añadir Carreras a la Malla</h3>
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4 mb-6">
               <div className="grid grid-cols-2 gap-4">
-                <input type="text" placeholder="Nombre (Ej. Ing. Sistemas)" value={carreraTemp.nombre} onChange={e => setCarreraTemp({...carreraTemp, nombre: e.target.value})} className="bg-slate-900 border border-slate-800 text-white px-3 py-2 rounded-lg text-sm outline-none" />
-                <input type="text" placeholder="Facultad (Ej. Ingeniería)" value={carreraTemp.facultad} onChange={e => setCarreraTemp({...carreraTemp, facultad: e.target.value})} className="bg-slate-900 border border-slate-800 text-white px-3 py-2 rounded-lg text-sm outline-none" />
+                <input aria-label="Nombre (Ej. Ing. Sistemas)" type="text" placeholder="Nombre (Ej. Ing. Sistemas)" value={carreraTemp.nombre} onChange={e => setCarreraTemp({...carreraTemp, nombre: e.target.value})} className="bg-slate-900 border border-slate-800 text-white px-3 py-2 rounded-lg text-sm outline-none" />
+                <input aria-label="Facultad (Ej. Ingeniería)" type="text" placeholder="Facultad (Ej. Ingeniería)" value={carreraTemp.facultad} onChange={e => setCarreraTemp({...carreraTemp, facultad: e.target.value})} className="bg-slate-900 border border-slate-800 text-white px-3 py-2 rounded-lg text-sm outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1">Adjuntar Plan de estudios (PDF) - Opcional</label>
-                <input type="file" accept="application/pdf" onChange={procesarMallaBase64} className="text-xs text-slate-400 w-full" />
+                <label htmlFor="admin-carrera-plan" className="block text-xs font-medium text-slate-300 mb-1">Adjuntar Plan de estudios (PDF) - Opcional</label>
+                <input id="admin-carrera-plan" type="file" accept="application/pdf" onChange={procesarMallaBase64} className="text-xs text-slate-200 w-full" />
               </div>
-              <button onClick={agregarCarreraAlFormulario} className="w-full bg-slate-800 hover:bg-slate-700 text-indigo-300 font-bold py-2 rounded-lg text-sm transition-colors border border-slate-700 cursor-pointer">+ Añadir esta carrera a la lista</button>
+              <button type="button" onClick={agregarCarreraAlFormulario} className="w-full bg-slate-800 hover:bg-slate-700 text-indigo-300 font-bold py-2 rounded-lg text-sm transition-colors border border-slate-700 cursor-pointer">+ Añadir esta carrera a la lista</button>
             </div>
             {formUni.carreras.length > 0 && (
               <div className="mb-6">
@@ -518,8 +511,8 @@ export default function AdminDashboard() {
               </div>
             )}
             <div className="flex gap-4 pt-4 border-t border-slate-800">
-              <button onClick={() => setMostrarModalUni(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-all cursor-pointer">Cancelar</button>
-              <button onClick={guardarNuevaUniversidad} className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all cursor-pointer">Guardar Institución Completa</button>
+              <button type="button" onClick={() => setMostrarModalUni(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-all cursor-pointer">Cancelar</button>
+              <button type="button" onClick={guardarNuevaUniversidad} className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all cursor-pointer">Guardar Institución Completa</button>
             </div>
           </div>
         </div>

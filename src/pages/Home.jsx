@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
@@ -70,7 +70,7 @@ export default function Home() {
             </p>
 
             <div className="pt-4">
-              <button
+              <button type="button"
                 onClick={handleStartTest}
                 className="group relative inline-flex items-center justify-center p-0.5 overflow-hidden text-base font-bold text-white rounded-xl bg-gradient-to-br from-teal-300 to-lime-300 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-xl shadow-teal-950/40"
               >
@@ -96,7 +96,7 @@ export default function Home() {
 
             <div className="w-full md:w-auto flex-1 max-w-md relative group flex gap-2">
               <div className="relative flex-1">
-                <input
+                <input aria-label="text"
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -111,7 +111,7 @@ export default function Home() {
                   </svg>
                 </div>
               </div>
-              <button
+              <button type="button"
                 onClick={handleSearchClick}
                 className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-3 rounded-xl transition-all shadow-md whitespace-nowrap"
               >
@@ -227,7 +227,7 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-16">
-            <button
+            <button type="button"
               onClick={handleStartTest}
               className="animate-bounce hover:animate-none inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold px-8 py-4 rounded-xl shadow-lg shadow-indigo-600/20 hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer"
             >

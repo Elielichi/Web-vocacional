@@ -29,7 +29,7 @@ function Navbar() {
               Mi Panel
             </Link>
             <div className="w-px h-5 bg-white/20"></div>
-            <button
+            <button type="button"
               onClick={handleLogout}
               className={`px-4 py-1.5 rounded-lg text-sm font-bold transition ${esAdmin ? 'bg-slate-800 hover:bg-red-900 text-slate-300 hover:text-red-200' : 'bg-blue-800 hover:bg-red-500 text-white'}`}
             >
@@ -84,7 +84,7 @@ function Navbar() {
               </li>
 
               <li>
-                <button
+                <button type="button"
                   onClick={handleLogout}
                   className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition"
                 >

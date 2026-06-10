@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Navbar from '../components/navbar';
@@ -219,14 +219,14 @@ const ResultadoTest = () => {
                     </div>
                   </div>
                   <div className="flex sm:flex-col gap-2 justify-end">
-                    <button 
+                    <button type="button" 
                       onClick={() => abrirEnlaceExterno(uni.mallaUrl)}
                       className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shadow-sm cursor-pointer"
                     >
                       {/* 🔥 AQUÍ ESTÁ EL CAMBIO DE TEXTO QUE PEDISTE */}
                       Ver plan de estudios
                     </button>
-                    <button 
+                    <button type="button" 
                       onClick={() => abrirEnlaceExterno(uni.masInfoUrl)}
                       className="border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors cursor-pointer"
                     >
@@ -244,13 +244,13 @@ const ResultadoTest = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 border-t border-gray-200 pt-6">
-          <button
+          <button type="button"
             onClick={() => navigate('/')}
             className="w-full sm:w-auto text-gray-600 hover:text-gray-900 font-medium text-sm px-4 py-2 transition-colors cursor-pointer"
           >
             Volver al Inicio
           </button>
-          <button
+          <button type="button"
             onClick={() => {
               localStorage.removeItem('carreraTemporal');
               navigate('/test');

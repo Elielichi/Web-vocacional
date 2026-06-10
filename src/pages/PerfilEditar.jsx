@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Navbar from '../components/navbar';
@@ -21,7 +21,7 @@ const PerfilEditar = () => {
           Debes iniciar sesión para editar tu perfil.
         </p>
 
-        <button
+        <button type="button"
           onClick={() => navigate('/login')}
           className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition"
         >
@@ -62,7 +62,7 @@ const PerfilEditar = () => {
           <div className="flex gap-2 bg-white rounded-2xl p-2 shadow-sm border border-slate-200 overflow-x-auto mb-6">
 
             {tabs.map((tab) => (
-              <button
+              <button type="button"
                 key={tab.id}
                 onClick={() => setTabActiva(tab.id)}
                 className={`flex-1 min-w-max px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${tabActiva === tab.id
@@ -148,7 +148,7 @@ const PerfilEditar = () => {
                     </p>
                   </div>
 
-                  <input
+                  <input aria-label="checkbox"
                     type="checkbox"
                     checked={user?.notificacionesEmail ?? false}
                     onChange={(e) =>
@@ -169,7 +169,7 @@ const PerfilEditar = () => {
                     </p>
                   </div>
 
-                  <input
+                  <input aria-label="checkbox"
                     type="checkbox"
                     checked={user?.recordatorios ?? false}
                     onChange={(e) =>
@@ -196,7 +196,7 @@ const PerfilEditar = () => {
                     </p>
                   </div>
 
-                  <input
+                  <input aria-label="checkbox"
                     type="checkbox"
                     checked={user?.perfilPublico ?? false} onChange={(e) =>
                       actualizarPreferencias({ perfilPublico: e.target.checked })
@@ -204,7 +204,7 @@ const PerfilEditar = () => {
                     className="w-5 h-5"
                   />                </div>
 
-                <button
+                <button type="button"
                   onClick={handleLogout}
                   className="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl font-bold transition-all"
                 >
